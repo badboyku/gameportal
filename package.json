@@ -1,12 +1,12 @@
 {
-  "name": "microfrontend-template",
-  "description": "This is a template for creating a micro-frontend react app.",
-  "version": "1.0.20",
+  "name": "gameportal",
+  "description": "This is the host app for the gameportal.",
+  "version": "1.0.0",
   "author": "badboyku",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/badboyku/microfrontend-template.git"
+    "url": "git+https://github.com/badboyku/gameportal.git"
   },
   "main": "src/index",
   "engines": {
@@ -143,7 +143,7 @@
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.7",
     "@types/node": "^20.8.10",
-    "@types/react": "^18.2.34",
+    "@types/react": "^18.2.35",
     "@types/react-dom": "^18.2.14",
     "babel-jest": "^29.7.0",
     "babel-loader": "^9.1.3",

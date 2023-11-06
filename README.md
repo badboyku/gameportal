@@ -1,5 +1,5 @@
-# microfrontend-template
-This is a template repo for creating a micro frontend react app.
+# gameportal
+
 
 Includes support for:
 - React with TypeScript/JavaScript (preferably stick to TypeScript)

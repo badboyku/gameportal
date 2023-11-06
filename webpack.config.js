@@ -108,7 +108,7 @@ module.exports = (_env, args) => {
     plugins: [
       new DefinePlugin(envVarsStringified),
       new ModuleFederationPlugin({
-        name: 'my_app',
+        name: 'gameportal',
         filename: 'remoteEntry.js',
         remotes: {},
         exposes: {},
