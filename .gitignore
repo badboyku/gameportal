@@ -1,0 +1,29 @@
+### App ####
+node_modules/
+dist/
+.env
+
+### CI/CD ###
+.npmrc
+
+### Debugging ###
+*.log
+
+### Jetbrains ###
+.idea/
+
+### Mac ###
+.DS_Store
+
+### Sonar ###
+.scanner/
+sonar-project.properties
+
+# Temporary env files
+public/runtime-env.js
+
+### Testing ###
+test_coverage/
+
+### VS Code ###
+.vscode/
