@@ -7,6 +7,44 @@ const { ModuleFederationPlugin } = require('webpack').container;
 const { merge } = require('webpack-merge');
 const deps = require('./package.json').dependencies;
 
+const generateDynamicRemoteConfig = (appName, configKey) => `promise new Promise(resolve => {
+  const url = window.__RUNTIME_CONFIG__.${configKey} + '/remoteEntry.js';
+  const script = document.createElement('script');
+  script.src = url;
+
+  script.onload = () => {
+    // the injected script has loaded and is available on window
+    // we can now resolve this Promise
+    const proxy = {
+      get: (request) => window.${appName}.get(request),
+      init: (arg) => {
+        try {
+          return window.${appName}.init(arg);
+        } catch(e) {
+          console.log('remote container already initialized');
+        }
+      }
+    }
+    resolve(proxy);
+  }
+
+  script.onerror = (error) => {
+    console.log('error loading remote container ${appName}');
+    const proxy = {
+      get: (request) => {
+        return Promise.resolve(() => () => '');
+      },
+      init: (arg) => {
+        return;
+      }
+    }
+    resolve(proxy);
+  }
+  // inject this script with the src set to the remoteEntry.js
+  document.head.appendChild(script);
+});
+`;
+
 module.exports = (_env, args) => {
   const mode = args.mode || 'development';
   const isProduction = mode === 'production';
@@ -110,7 +148,9 @@ module.exports = (_env, args) => {
       new ModuleFederationPlugin({
         name: 'gameportal',
         filename: 'remoteEntry.js',
-        remotes: {},
+        remotes: {
+          gameportal_poker: generateDynamicRemoteConfig('gameportal_poker', 'GAMEPORTAL_POKER_URL'),
+        },
         exposes: {},
         shared: { ...deps },
       }),

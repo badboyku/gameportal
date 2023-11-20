@@ -1,5 +1,5 @@
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import {createMemoryRouter, RouterProvider} from 'react-router-dom';
+import {render, screen} from '@testing-library/react';
 import routes from './index';
 
 jest.mock('../pages/Home', () => ({ Home: () => <div data-testid="home" /> }));
@@ -20,6 +20,7 @@ describe('Component Routes', () => {
   it('renders the default route "Routes" -> "HomePage"', () => {
     renderRoutes();
 
+    // @ts-ignore
     expect(screen.getByTestId('home')).toBeInTheDocument();
   });
 });

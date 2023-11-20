@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import HelloWorld from './HelloWorld';
 
 const renderHelloWorld = (props = {}) => {
@@ -15,6 +15,7 @@ describe('Component HelloWorld', () => {
   it('renders div with "Hello World!"', () => {
     renderHelloWorld();
 
+    // @ts-ignore
     expect(screen.getByText('Hello World!')).toBeInTheDocument();
   });
 });

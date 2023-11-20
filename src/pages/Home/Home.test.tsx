@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import Home from './Home';
 
 jest.mock('../../components/HelloWorld', () => ({ HelloWorld: () => <div data-testid="helloWorld" /> }));
@@ -17,12 +17,14 @@ describe('Component HomePage', () => {
   it('renders header Home', () => {
     renderHomePage();
 
+    // @ts-ignore
     expect(screen.getByText('Home')).toBeInTheDocument();
   });
 
   it('renders HelloWorld Component', () => {
     renderHomePage();
 
+    // @ts-ignore
     expect(screen.getByTestId('helloWorld')).toBeInTheDocument();
   });
 });

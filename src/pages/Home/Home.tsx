@@ -1,17 +1,23 @@
-import { HelloWorld } from '../../components';
-import { getEnvVars } from '../../utils/env';
-import logoUrl, { ReactComponent as Logo } from './logo.svg';
+import {useLoaderData, useRouteLoaderData} from 'react-router-dom';
+import {HelloWorld} from '../../components';
+import {getEnvVars} from '../../utils/env';
+import logoUrl, {ReactComponent as Logo} from './logo.svg';
 import './style.scss';
 import './styles.css';
 
 type Props = {};
 
 const Home = (_props: Props) => {
+  const gameportalData = useRouteLoaderData('gameportal');
+  const gameportalPokerData = useRouteLoaderData('gameportalPoker');
+  const data = useLoaderData();
+  console.log('gameportal Home', { gameportalData, gameportalPokerData, data });
+
   const { REACT_APP_MY_VAR } = getEnvVars();
 
   return (
     <div>
-      <h1>Home</h1>
+      <h1>Game Portal</h1>
       <HelloWorld />
       <img src={logoUrl} className="logo" alt="logo" />
       <Logo width={40} />
