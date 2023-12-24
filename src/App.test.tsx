@@ -1,4 +1,5 @@
-import {render, screen} from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
 const renderApp = (props = {}) => {
@@ -15,7 +16,6 @@ describe('Component App', () => {
   it('renders the default route "App" -> "Routes -> "HomePage" -> "HelloWorld"', () => {
     renderApp();
 
-    // @ts-ignore
     expect(screen.getByText('Hello World!')).toBeInTheDocument();
   });
 });

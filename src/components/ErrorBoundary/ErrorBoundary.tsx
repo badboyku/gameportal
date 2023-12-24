@@ -1,5 +1,5 @@
-import {memo, useCallback, useRef} from 'react';
-import {useRouteError} from 'react-router-dom';
+import { memo, useCallback, useRef } from 'react';
+import { useRouteError } from 'react-router-dom';
 
 const ErrorBoundary = () => {
   const error = useRef(useRouteError() as Error);
