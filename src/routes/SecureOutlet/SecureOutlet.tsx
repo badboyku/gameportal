@@ -1,42 +1,54 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { memo, useEffect } from 'react';
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
-import { AppNav } from '../../components';
-import type { Context } from '../index';
+import config from '../../utils/config';
+import { AppNav } from '../AppNav';
+import type { AppContext } from '../../@types/global';
 
 type Props = {};
 
 const SecureOutlet = (_props: Props) => {
-  const { error: auth0error, isAuthenticated, isLoading, user } = useAuth0();
+  const {
+    isAuthenticated: auth0isAuthenticated,
+    user: auth0user,
+    getAccessTokenSilently,
+    getIdTokenClaims,
+  } = useAuth0();
   const navigate = useNavigate();
-  const context = useOutletContext<Context>();
-
+  const context = useOutletContext<AppContext>();
   const { auth } = context;
-  const { accessToken, idToken, error, fetchTokens } = auth;
-  console.log('gameportal SecureOutlet', { auth0error, isAuthenticated, isLoading, user, accessToken, idToken, error });
+  const { isAuthenticated, setData } = auth;
+  console.log('GameportalSecureOutlet', { auth0isAuthenticated, auth0user, isAuthenticated });
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      console.log('GameportalSecureOutlet - navigate to login');
+    console.log('GameportalSecureOutlet - useEffect1', { auth0isAuthenticated });
+    if (!auth0isAuthenticated) {
+      console.log('GameportalSecureOutlet - useEffect1 before navigate to login');
       navigate('/login');
     }
-  }, [isLoading, isAuthenticated, navigate]);
+  }, [auth0isAuthenticated, navigate]);
 
   useEffect(() => {
-    (async () => {
-      if (fetchTokens) {
-        await fetchTokens();
-      }
-    })();
-  }, [fetchTokens]);
+    console.log('GameportalSecureOutlet - useEffect2', { auth0isAuthenticated, auth0user, isAuthenticated });
+    if (auth0isAuthenticated && auth0user && !isAuthenticated) {
+      (async () => {
+        if (setData) {
+          setData({
+            isAuthenticated: auth0isAuthenticated,
+            accessToken: await getAccessTokenSilently({
+              authorizationParams: { redirect_uri: config.auth0.redirectUri },
+            }),
+            idToken: await getIdTokenClaims(),
+            user: auth0user,
+          });
+        }
+      })();
+    }
+  }, [auth0isAuthenticated, auth0user, isAuthenticated, getAccessTokenSilently, getIdTokenClaims, setData]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (auth0error) {
-    return <div>Oops... {auth0error.message}</div>;
-  }
-  if (!isAuthenticated || !accessToken || !idToken) {
+  if (!isAuthenticated) {
+    console.log('GameportalSecureOutlet - !isAuthenticated');
+
     return null;
   }
 

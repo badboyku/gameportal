@@ -1,28 +1,15 @@
 /* eslint-disable import/no-unresolved, import/order, @typescript-eslint/ban-ts-comment */
 import { Auth0Provider } from '@auth0/auth0-react';
-import { useMemo } from 'react';
-import { Outlet, redirect } from 'react-router-dom';
-import { ErrorBoundary } from '../components';
+import { redirect } from 'react-router-dom';
 import { Home, Login } from '../pages';
 import config from '../utils/config';
-import { useAuth } from '../utils/hooks';
+import { AppRoot } from './AppRoot';
+import { ErrorBoundary } from './ErrorBoundary';
 import { SecureOutlet } from './SecureOutlet';
 import type { RouteObject } from 'react-router-dom';
-import type { AuthState } from '../utils/hooks/useAuth';
 
 // @ts-ignore
 import { getRoutes as getPokerRoutes } from 'gameportal_poker/pokerRoutes';
-
-export type Context = { auth: AuthState };
-
-const Root = () => {
-  const auth = useAuth();
-  const context = useMemo(() => ({ auth }), [auth]);
-  const { accessToken, idToken, error } = auth;
-  console.log('gameportal Root', { accessToken, idToken, error, context });
-
-  return <Outlet context={context} />;
-};
 
 const routes: RouteObject[] = [
   {
@@ -36,7 +23,7 @@ const routes: RouteObject[] = [
         useRefreshTokens
         useRefreshTokensFallback
       >
-        <Root />
+        <AppRoot />
       </Auth0Provider>
     ),
     errorElement: <ErrorBoundary />,
@@ -46,7 +33,12 @@ const routes: RouteObject[] = [
         element: <SecureOutlet />,
         children: [
           { index: true, element: <Home /> },
-          { path: '/poker/*', children: getPokerRoutes ? getPokerRoutes({ appPath: '/poker', isRemote: true }) : [] },
+          {
+            path: '/poker/*',
+            children: getPokerRoutes
+              ? getPokerRoutes({ appPath: '/poker', isRemote: true })
+              : /* istanbul ignore next */ [],
+          },
         ],
       },
       { path: '*', loader: () => redirect('/') },

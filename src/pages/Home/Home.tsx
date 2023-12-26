@@ -1,22 +1,18 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useOutletContext } from 'react-router-dom';
 import { HelloWorld } from '../../components';
 import { getEnvVars } from '../../utils/env';
 import logoUrl, { ReactComponent as Logo } from './logo.svg';
 import './style.scss';
 import './styles.css';
-import type { Context } from '../../routes';
+import type { AppContext } from '../../@types/global';
 
 type Props = {};
 
 const Home = (_props: Props) => {
-  const { user } = useAuth0();
-  const context = useOutletContext<Context>();
-
-  const { auth } = context;
-  const { accessToken, idToken } = auth;
   const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_AUTH0_REDIRECT_URI } = getEnvVars();
-  console.log('gameportal Home', { user, accessToken, idToken });
+  const { auth } = useOutletContext<AppContext>();
+  const { isAuthenticated, authSetDateTime, accessToken, idToken, user } = auth;
+  console.log('GameportalHome', { isAuthenticated, authSetDateTime, accessToken, idToken, user });
 
   return (
     <div>

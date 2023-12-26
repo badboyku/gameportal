@@ -2,17 +2,15 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { memo } from 'react';
 import { NavLink, useOutletContext } from 'react-router-dom';
 import config from '../../utils/config';
-import type { Context } from '../../routes';
+import type { AppContext } from '../../@types/global';
 
 type Props = {};
 
 const AppNav = (_props: Props) => {
-  const { user, logout } = useAuth0();
-  const context = useOutletContext<Context>();
-
-  const { auth } = context;
-  const { accessToken, idToken } = auth;
-  console.log('gameportal AppNav', { user, accessToken, idToken });
+  const { logout } = useAuth0();
+  const { auth } = useOutletContext<AppContext>();
+  const { isAuthenticated, authSetDateTime, accessToken, idToken, user } = auth;
+  console.log('GameportalAppNav', { isAuthenticated, authSetDateTime, accessToken, idToken, user });
 
   return (
     <div>

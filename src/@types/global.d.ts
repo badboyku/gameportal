@@ -1,3 +1,16 @@
+import type { IdToken, User } from '@auth0/auth0-spa-js';
+import type { DateTime } from 'luxon';
+
+export type AuthData = {
+  isAuthenticated?: boolean;
+  authSetDateTime?: DateTime;
+  accessToken?: string;
+  idToken?: IdToken;
+  user?: User;
+};
+export type AuthState = { setData?: (data: AuthData) => void } & AuthData;
+export type AppContext = { auth: AuthState };
+
 // Add custom react env vars here for runtime env vars.
 export type ReactAppEnvVars = {
   NODE_ENV?: string;
