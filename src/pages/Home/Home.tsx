@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { HelloWorld } from '../../components';
 import { getEnvVars } from '../../utils/env';
@@ -47,4 +48,4 @@ const Home = (_props: Props) => {
   );
 };
 
-export default Home;
+export default memo(Home);

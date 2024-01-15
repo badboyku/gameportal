@@ -1,15 +1,20 @@
 /* eslint-disable import/no-unresolved, import/order, @typescript-eslint/ban-ts-comment */
 import { Auth0Provider } from '@auth0/auth0-react';
+import type { RouteObject } from 'react-router-dom';
 import { redirect } from 'react-router-dom';
 import { Home, Login } from '../pages';
 import config from '../utils/config';
 import { AppRoot } from './AppRoot';
 import { ErrorBoundary } from './ErrorBoundary';
 import { SecureOutlet } from './SecureOutlet';
-import type { RouteObject } from 'react-router-dom';
-
 // @ts-ignore
 import { getRoutes as getPokerRoutes } from 'gameportal_poker/pokerRoutes';
+
+const remoteRoutes: RouteObject[] = [];
+
+if (getPokerRoutes) {
+  remoteRoutes.push({ path: '/poker/*', children: getPokerRoutes({ appPath: '/poker', isRemote: true }) });
+}
 
 const routes: RouteObject[] = [
   {
@@ -29,18 +34,7 @@ const routes: RouteObject[] = [
     errorElement: <ErrorBoundary />,
     children: [
       { path: 'login/', element: <Login /> },
-      {
-        element: <SecureOutlet />,
-        children: [
-          { index: true, element: <Home /> },
-          {
-            path: '/poker/*',
-            children: getPokerRoutes
-              ? getPokerRoutes({ appPath: '/poker', isRemote: true })
-              : /* istanbul ignore next */ [],
-          },
-        ],
-      },
+      { element: <SecureOutlet />, children: [{ index: true, element: <Home /> }, ...remoteRoutes] },
       { path: '*', loader: () => redirect('/') },
     ],
   },

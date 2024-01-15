@@ -33,6 +33,7 @@ const SecureOutlet = (_props: Props) => {
     if (auth0isAuthenticated && auth0user && !isAuthenticated) {
       (async () => {
         if (setData) {
+          console.log('GameportalSecureOutlet - useEffect2 before setData');
           setData({
             isAuthenticated: auth0isAuthenticated,
             accessToken: await getAccessTokenSilently({
