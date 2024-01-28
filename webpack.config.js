@@ -7,40 +7,25 @@ const { ModuleFederationPlugin } = require('webpack').container;
 const { merge } = require('webpack-merge');
 const deps = require('./package.json').dependencies;
 
-const generateDynamicRemoteConfig = (appName, configKey) => `promise new Promise(resolve => {
-  const url = window.__RUNTIME_CONFIG__.${configKey} + '/remoteEntry.js';
+const generateDynamicRemoteConfig = (appName, configKey) => `promise new Promise((resolve) => {
   const script = document.createElement('script');
-  script.src = url;
-
+  script.src = window.__RUNTIME_CONFIG__.${configKey} + '/remoteEntry.js';
   script.onload = () => {
-    // the injected script has loaded and is available on window
-    // we can now resolve this Promise
-    const proxy = {
+    resolve({
       get: (request) => window.${appName}.get(request),
       init: (arg) => {
         try {
           return window.${appName}.init(arg);
-        } catch(e) {
-          console.log('remote container already initialized');
+        } catch(error) {
+          // Do nothing.
         }
-      }
-    }
-    resolve(proxy);
-  }
-
-  script.onerror = (error) => {
-    console.log('error loading remote container ${appName}');
-    const proxy = {
-      get: (request) => {
-        return Promise.resolve(() => () => '');
       },
-      init: (arg) => {
-        return;
-      }
-    }
-    resolve(proxy);
+    });
   }
-  // inject this script with the src set to the remoteEntry.js
+  script.onerror = () => {
+    console.log('Error loading remote app: ${appName}');
+    resolve({ get: (request) => Promise.resolve(() => ''), init: (arg) => undefined });
+  }
   document.head.appendChild(script);
 });
 `;
@@ -104,7 +89,7 @@ module.exports = (_env, args) => {
           exclude: /node_modules/,
           options: {
             presets: [
-              [require.resolve('@babel/preset-env'), { useBuiltIns: 'usage', corejs: '3.34.0' }],
+              [require.resolve('@babel/preset-env'), { useBuiltIns: 'usage', corejs: '3.35.1' }],
               [require.resolve('@babel/preset-react'), { runtime: 'automatic' }],
               require.resolve('@babel/preset-typescript'),
             ],
