@@ -1,9 +1,9 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { memo, useEffect } from 'react';
-import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
+import {useAuth0} from '@auth0/auth0-react';
+import {memo, useEffect} from 'react';
+import {Outlet, useNavigate, useOutletContext} from 'react-router-dom';
 import config from '../../utils/config';
-import { AppNav } from '../AppNav';
-import type { AppContext } from '../../@types/global';
+import {AppNav} from '../AppNav';
+import type {AppContext} from '../../@types/global';
 
 type Props = {};
 
@@ -17,7 +17,7 @@ const SecureOutlet = (_props: Props) => {
   const navigate = useNavigate();
   const context = useOutletContext<AppContext>();
   const { auth } = context;
-  const { isAuthenticated, setData } = auth;
+  const { isAuthenticated, setData: setAuthData } = auth;
   console.log('GameportalSecureOutlet', { auth0isAuthenticated, auth0user, isAuthenticated });
 
   useEffect(() => {
@@ -32,9 +32,9 @@ const SecureOutlet = (_props: Props) => {
     console.log('GameportalSecureOutlet - useEffect2', { auth0isAuthenticated, auth0user, isAuthenticated });
     if (auth0isAuthenticated && auth0user && !isAuthenticated) {
       (async () => {
-        if (setData) {
+        if (setAuthData) {
           console.log('GameportalSecureOutlet - useEffect2 before setData');
-          setData({
+          setAuthData({
             isAuthenticated: auth0isAuthenticated,
             accessToken: await getAccessTokenSilently({
               authorizationParams: { redirect_uri: config.auth0.redirectUri },
@@ -45,7 +45,7 @@ const SecureOutlet = (_props: Props) => {
         }
       })();
     }
-  }, [auth0isAuthenticated, auth0user, isAuthenticated, getAccessTokenSilently, getIdTokenClaims, setData]);
+  }, [auth0isAuthenticated, auth0user, isAuthenticated, getAccessTokenSilently, getIdTokenClaims, setAuthData]);
 
   if (!isAuthenticated) {
     console.log('GameportalSecureOutlet - !isAuthenticated');
