@@ -11,14 +11,24 @@ const initialState = {
   setData: undefined,
 };
 
-const useAuth = (): AuthState => {
+export const useAuth = (): AuthState => {
   const [state, setState] = useState<AuthState>(initialState);
 
   const setData = useCallback((data: AuthData) => {
-    setState((s) => ({ ...s, authSetDateTime: DateTime.local(), ...data }));
+    setState((oldState) => {
+      const { idToken, ...rest } = data;
+      const newState = {
+        ...oldState,
+        ...rest,
+        isAuthenticated: !!idToken?.__raw?.length,
+        idToken,
+        authSetDateTime: DateTime.local(),
+      };
+      console.log('GameportalUseAuth - setData', { data, oldState, newState });
+
+      return newState;
+    });
   }, []);
 
   return { ...state, setData };
 };
-
-export default useAuth;

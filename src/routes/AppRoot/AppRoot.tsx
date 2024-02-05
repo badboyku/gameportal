@@ -6,8 +6,8 @@ import { useAuth } from '../../utils/hooks';
 type Props = {};
 
 const AppRoot = (_props: Props) => {
-  const { isLoading: auth0isLoading, error: auth0error } = useAuth0();
   const auth = useAuth();
+  const { isLoading: auth0isLoading, error: auth0error } = useAuth0();
   const context = useMemo(() => ({ auth }), [auth]);
   console.log('GameportalAppRoot', { context });
 

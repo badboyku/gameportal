@@ -1,14 +1,14 @@
 /* eslint-disable import/no-unresolved, import/order, @typescript-eslint/ban-ts-comment */
-import {Auth0Provider} from '@auth0/auth0-react';
-import type {RouteObject} from 'react-router-dom';
-import {redirect} from 'react-router-dom';
-import {Home, Login} from '../pages';
+import { Auth0Provider } from '@auth0/auth0-react';
+import type { RouteObject } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
+import { Home, Login } from '../pages';
 import config from '../utils/config';
-import {AppRoot} from './AppRoot';
-import {ErrorBoundary} from './ErrorBoundary';
-import {SecureOutlet} from './SecureOutlet';
+import { AppRoot } from './AppRoot';
+import { ErrorBoundary } from './ErrorBoundary';
+import { SecureOutlet } from './SecureOutlet';
 // @ts-ignore
-import {getRoutes as getPokerRoutes} from 'gameportal_poker/pokerRoutes';
+import { getRoutes as getPokerRoutes } from 'gameportal_poker/pokerRoutes';
 
 const remoteRoutes: RouteObject[] = [];
 

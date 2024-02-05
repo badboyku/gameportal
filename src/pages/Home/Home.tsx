@@ -11,8 +11,9 @@ type Props = {};
 
 const Home = (_props: Props) => {
   const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_AUTH0_REDIRECT_URI } = getEnvVars();
-  const { auth } = useOutletContext<AppContext>();
-  const { isAuthenticated, authSetDateTime, accessToken, idToken, user } = auth;
+  const outletContext = useOutletContext<AppContext>();
+  const { auth: authState } = outletContext || {};
+  const { isAuthenticated, authSetDateTime, accessToken, idToken, user } = authState || {};
   console.log('GameportalHome', { isAuthenticated, authSetDateTime, accessToken, idToken, user });
 
   return (

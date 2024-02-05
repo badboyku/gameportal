@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 type Props = {};
 
 const Login = (_props: Props) => {
-  const { isAuthenticated: auth0isAuthenticated, user: auth0user, loginWithRedirect } = useAuth0();
+  const { isAuthenticated: auth0isAuthenticated, loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
-  console.log('GameportalLogin', { auth0isAuthenticated, auth0user });
+  console.log('GameportalLogin', { auth0isAuthenticated });
 
   useEffect(() => {
     console.log('GameportalLogin - useEffect1', { auth0isAuthenticated });
